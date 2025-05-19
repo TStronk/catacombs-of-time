@@ -1,0 +1,80 @@
+[gd_scene load_steps=12 format=3 uid="uid://bi4mcba3ask7v"]
+
+[ext_resource type="Script" uid="uid://bvu1ppcre04ef" path="res://projectile.gd" id="1_hfqvw"]
+[ext_resource type="Texture2D" uid="uid://dilnwp7vlx6rv" path="res://Metroidvania Pack/Extraordinary Pixelvania - Free Asset Pack/Sprites/Projectiles/Common_Projectile-Sheet.png" id="2_b06dr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_10k3m"]
+atlas = ExtResource("2_b06dr")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hff2l"]
+atlas = ExtResource("2_b06dr")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfgpc"]
+atlas = ExtResource("2_b06dr")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q6jnt"]
+atlas = ExtResource("2_b06dr")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdnbw"]
+atlas = ExtResource("2_b06dr")
+region = Rect2(96, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4jrqt"]
+atlas = ExtResource("2_b06dr")
+region = Rect2(120, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2aulv"]
+atlas = ExtResource("2_b06dr")
+region = Rect2(144, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xrp24"]
+atlas = ExtResource("2_b06dr")
+region = Rect2(168, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_i2xfk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_10k3m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hff2l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qfgpc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q6jnt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdnbw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4jrqt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2aulv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xrp24")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="CommonProjectile2D" type="CharacterBody2D"]
+script = ExtResource("1_hfqvw")
+
+[node name="CommonProjectile" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_i2xfk")
+autoplay = "default"
+frame_progress = 0.294906
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(13, 0, 8, -4, -6, -4, -11, 0, -6, 5, 8, 5)

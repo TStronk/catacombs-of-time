@@ -1,0 +1,56 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://c35mvessfrac4"]
+
+[ext_resource type="Texture2D" uid="uid://cg7ra5lyw6rjv" path="res://Sprite Textures/Kenney Pack/Spritesheets/spritesheet-characters-default.png" id="1_wbykn"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pem1q"]
+texture = ExtResource("1_wbykn")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+
+[resource]
+tile_size = Vector2i(128, 128)
+sources/1 = SubResource("TileSetAtlasSource_pem1q")
