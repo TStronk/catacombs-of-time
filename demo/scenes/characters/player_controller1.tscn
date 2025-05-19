@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7r5yuxo2hpkb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b8jga"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_igats"]
+
+[node name="PlayerController" type="PlayerController"]
+move_speed = 10.0
+gravity = 10.0
+position = Vector2(0, 4.36942e+08)
+up_direction = Vector2(0.0099995, 0.99995)
+velocity = Vector2(0, 871616)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_b8jga")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("PlaceholderTexture2D_igats")
+
+[node name="Camera2D" type="Camera2D" parent="."]

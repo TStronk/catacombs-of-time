@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://vwae1pib5f13"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b8jga"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_igats"]
+
+[node name="PlayerController" type="PlayerController"]
+position = Vector2(0, -2.22607e+08)
+motion_mode = 1
+velocity = Vector2(0, -1.04165e+06)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_b8jga")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("PlaceholderTexture2D_igats")
+
+[node name="Camera2D" type="Camera2D" parent="."]
