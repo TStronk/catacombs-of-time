@@ -1,0 +1,122 @@
+[gd_scene load_steps=3 format=3 uid="uid://8w8p6wnqbmny"]
+
+[ext_resource type="Script" uid="uid://d33m83hov5vkf" path="res://scripts/keybinds.gd" id="1_kdsma"]
+
+[sub_resource type="Theme" id="Theme_s0hhd"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_kdsma")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 41.0
+offset_bottom = 41.0
+theme = SubResource("Theme_s0hhd")
+theme_override_constants/separation = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Move Left" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Move Left"
+
+[node name="move_left" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Move Right" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Move Right"
+
+[node name="move_right" type="Button" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Move Up" type="Label" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Move Up"
+
+[node name="move_up" type="Button" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Move Down" type="Label" parent="VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Move Down"
+
+[node name="move_down" type="Button" parent="VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Dash" type="Label" parent="VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Dash"
+
+[node name="dash" type="Button" parent="VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Attack 1"
+
+[node name="attack_1" type="Button" parent="VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Attack 2"
+
+[node name="attack_2" type="Button" parent="VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+text = "Attack 3"
+
+[node name="attack_3" type="Button" parent="VBoxContainer/HBoxContainer8"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 102.0
+offset_top = 238.0
+offset_right = 322.0
+offset_bottom = 278.0
+
+[node name="Label" type="Label" parent="PanelContainer"]
+layout_mode = 2
+text = "Press key or mouse button…"
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 0
+offset_left = 182.0
+offset_top = 293.0
+offset_right = 227.0
+offset_bottom = 324.0
+text = "Back"
+
+[connection signal="pressed" from="Back" to="." method="_on_Back_pressed"]

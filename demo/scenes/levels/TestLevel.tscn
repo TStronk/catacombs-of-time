@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=4 uid="uid://cn618g71dfba5"]
 
-[ext_resource type="Script" uid="uid://dlxopwtegjnbv" path="res://TestLevel.gd" id="1_timdk"]
+[ext_resource type="Script" uid="uid://dh01qpcer06fr" path="res://scenes/levels/test_level.gd" id="1_timdk"]
 [ext_resource type="Texture2D" uid="uid://pdxfocd0fghe" path="res://atlas.png" id="2_j0sv7"]
 [ext_resource type="PackedScene" uid="uid://qpuelgslnd0w" path="res://scenes/characters/player.tscn" id="3_buy1m"]
 [ext_resource type="PackedScene" uid="uid://h7ua2yr2awbc" path="res://scenes/characters/enemy.tscn" id="4_4unv2"]
@@ -651,24 +651,23 @@ scale = Vector2(11.5284, 1.40641)
 zoom = Vector2(0.006, 0.006)
 
 [node name="BasicEnemy" parent="." instance=ExtResource("4_4unv2")]
-position = Vector2(1.64227e+06, 1.84438e+08)
+position = Vector2(1.6734e+06, 3.10987e+08)
 collision_layer = 255
 collision_mask = 255
-velocity = Vector2(30, 106091)
+velocity = Vector2(30, 137215)
 
 [node name="BasicEnemy2" parent="." instance=ExtResource("4_4unv2")]
-position = Vector2(-1.46383e+06, 1.31223e+08)
+position = Vector2(-1.43271e+06, 2.39884e+08)
 scale = Vector2(0.999678, 1)
 collision_layer = 255
-velocity = Vector2(30, 88729)
+velocity = Vector2(30, 119853)
 
 [node name="GamePhysics" type="GamePhysics" parent="."]
-is_deterministic = true
 
 [node name="Player" parent="." instance=ExtResource("3_buy1m")]
-move_speed = 100000.0
+move_speed = 1e+06
 jump_force = 100000.0
-position = Vector2(-23134.6, 3008.77)
+position = Vector2(2560, 3008.77)
+disable_mode = 0
 input_pickable = true
-motion_mode = 1
-velocity = Vector2(0, 17235)
+velocity = Vector2(0, 0)
