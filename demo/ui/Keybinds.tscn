@@ -1,6 +1,71 @@
-[gd_scene load_steps=3 format=3 uid="uid://8w8p6wnqbmny"]
+[gd_scene load_steps=3 format=3 uid="uid://d0brrfob2ixtk"]
 
-[ext_resource type="Script" uid="uid://d33m83hov5vkf" path="res://scripts/keybinds.gd" id="1_kdsma"]
+[sub_resource type="GDScript" id="GDScript_wa4vl"]
+script/source = "extends Control
+# Custom Key-bind tutorial script for Godot 4
+
+var current_button: Button
+
+@onready var vbox       := $VBoxContainer
+@onready var info_panel := $PanelContainer
+@onready var back_btn   := $Back
+
+func _ready() -> void:
+	# Connect each Button inside the HBox rows
+	for row in vbox.get_children():
+		if row is HBoxContainer:
+			for child in row.get_children():
+				if child is Button:
+					child.text = \"\"  # clear placeholder
+					child.pressed.connect(_on_button_pressed.bind(child))
+
+	# Back hides the panel
+	back_btn.pressed.connect(_on_back_pressed)
+
+	_update_labels()
+	info_panel.visible = false
+
+func _on_button_pressed(btn: Button) -> void:
+	current_button = btn
+	info_panel.visible = true
+
+func _input(event: InputEvent) -> void:
+	if current_button == null:
+		return
+
+	if event is InputEventKey or event is InputEventMouseButton:
+		var action := current_button.name
+
+		# remove duplicates
+		for a in InputMap.get_actions():
+			for ev in InputMap.action_get_events(a):
+				if ev.equals(event):
+					InputMap.action_erase_event(a, ev)
+
+		# assign new
+		InputMap.action_erase_events(action)
+		InputMap.action_add_event(action, event)
+		ProjectSettings.save()  # persist to project.godot
+
+		current_button = null
+		info_panel.visible = false
+		_update_labels()
+
+func _update_labels() -> void:
+	# refresh each button’s text
+	for row in vbox.get_children():
+		if row is HBoxContainer:
+			for child in row.get_children():
+				if child is Button:
+					var evs = InputMap.action_get_events(child.name)
+					if evs.is_empty():
+						child.text = \"Unassigned\"
+					else:
+						child.text = evs[0].as_text()
+
+func _on_back_pressed() -> void:
+	info_panel.visible = false
+"
 
 [sub_resource type="Theme" id="Theme_s0hhd"]
 
@@ -9,7 +74,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_kdsma")
+script = SubResource("GDScript_wa4vl")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0

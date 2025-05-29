@@ -17,7 +17,8 @@ env.Append(CPPPATH=[
     "src/",
     "src/Player/",
     "src/Enemy/",
-    "src/Physics/"
+    "src/Physics/",
+    "src/sprite_sheet_loader/"
 ])
 
 # Gather all .cpp files including those in subdirectories
