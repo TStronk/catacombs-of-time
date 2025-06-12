@@ -13,8 +13,9 @@ class GamePhysics : public Node {
 private:
     float gravity = 30.0f;
     bool is_deterministic = false;
-    float fixed_timestep = 1.0f/60.0f;
-    PhysicsServer2D* physics_server;
+    float fixed_timestep = 1.0f/60.0f; //60 FPS
+    double physics_time_accumulator = 0.0;
+    PhysicsServer2D* physics_server = nullptr;
 
 protected:
     static void _bind_methods();
@@ -26,6 +27,8 @@ public:
     virtual void _ready() override;
     virtual void _process(double delta) override;
     
+    void _step_physics(double step);
+
     // Getters and setters
     void set_gravity(float p_gravity);
     float get_gravity() const;

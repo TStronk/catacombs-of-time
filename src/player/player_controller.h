@@ -42,8 +42,8 @@ public:
     void set_move_speed(float s);
     float get_move_speed() const;
 
-    void set_jump_force(float j);
-    float get_jump_force() const;
+    void set_jump_velocity(float j);
+    float get_jump_velocity() const;
 
     void set_gravity(float g);
     float get_gravity() const;
@@ -110,7 +110,7 @@ private:
     float double_jump_force = 450.0f; // Reduced from 500
     float wall_jump_force_x = 300.0f; // Reduced from 400
     float wall_jump_force_y = 400.0f; // Reduced from 500
-    float gravity = 1200.0f;          // Reduced from 1800
+    float gravity = 981.0f;          // Reduced from 1800
     float max_fall_speed = 800.0f;    // Reduced from 1000
     float wall_slide_speed = 80.0f;   // Reduced from 100
     float dash_speed = 500.0f;        // Reduced from 800
@@ -118,6 +118,9 @@ private:
     float air_control = 0.7f;         // Increased from 0.3 for better control
     float friction = 0.2f;            // Increased from 0.1
     float acceleration = 0.4f;        // Increased from 0.2
+    float jump_velocity = 360.0f;
+    float jump_cutoff_factor = 0.0f;
+    float jump = 1400.0f;
     
     // === State Variables ===
     Vector2 spawn_point;
@@ -127,6 +130,7 @@ private:
     bool is_wall_sliding = false;
     int wall_direction = 0;  // -1 left, 1 right
     float input_buffer_x = 0.0f;
+    bool is_jumping = false;
     
     // === Timers ===
     float dash_duration = 0.2f;
@@ -148,6 +152,8 @@ private:
     
     float slide_duration = 0.5f;
     float slide_timer = 0.0f;
+    
+    float jump_timer = 0.0f;
     
     // === Combat System ===
     int max_health = 100;

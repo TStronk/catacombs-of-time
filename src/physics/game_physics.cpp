@@ -1,31 +1,35 @@
 #include "game_physics.h"
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/classes/physics_server2d.hpp>
+#include <godot_cpp/core/class_db.hpp>
 
 using namespace godot;
 
 void GamePhysics::_bind_methods() {
-    // Properties
+    // Gravity
     ClassDB::bind_method(D_METHOD("set_gravity", "gravity"), &GamePhysics::set_gravity);
     ClassDB::bind_method(D_METHOD("get_gravity"), &GamePhysics::get_gravity);
     ClassDB::add_property("GamePhysics", PropertyInfo(Variant::FLOAT, "gravity"), "set_gravity", "get_gravity");
     
+    // Determinism flag
     ClassDB::bind_method(D_METHOD("set_is_deterministic", "deterministic"), &GamePhysics::set_is_deterministic);
     ClassDB::bind_method(D_METHOD("get_is_deterministic"), &GamePhysics::get_is_deterministic);
     ClassDB::add_property("GamePhysics", PropertyInfo(Variant::BOOL, "is_deterministic"), "set_is_deterministic", "get_is_deterministic");
     
+    // Fixed timestep
     ClassDB::bind_method(D_METHOD("set_fixed_timestep", "timestep"), &GamePhysics::set_fixed_timestep);
     ClassDB::bind_method(D_METHOD("get_fixed_timestep"), &GamePhysics::get_fixed_timestep);
     ClassDB::add_property("GamePhysics", PropertyInfo(Variant::FLOAT, "fixed_timestep"), "set_fixed_timestep", "get_fixed_timestep");
 }
 
+// Constructor
 GamePhysics::GamePhysics() {
-    // Constructor
-    UtilityFunctions::print("GamePhysics created");
+    UtilityFunctions::print("GamePhysics created.");
 }
 
+// Destructor
 GamePhysics::~GamePhysics() {
-    // Destructor
-    UtilityFunctions::print("GamePhysics destroyed");
+    UtilityFunctions::print("GamePhysics destroyed.");
 }
 
 void GamePhysics::_ready() {
@@ -33,6 +37,7 @@ void GamePhysics::_ready() {
     
     // Apply our gravity setting
     if (physics_server) {
+        UtilityFunctions::print("Physics server ready.");
         /*
         // Get the current project gravity
         Vector2 project_gravity = physics_server->area_get_param(RID(), PhysicsServer2D::AREA_PARAM_GRAVITY_VECTOR);
@@ -48,11 +53,22 @@ void GamePhysics::_ready() {
 }
 
 void GamePhysics::_process(double delta) {
-    // If using deterministic physics, we would handle custom physics updates here
-    if (is_deterministic) {
-        // This would require a more complex implementation
-        // Usually involves manual stepping of physics and fixed timestep
+    if (!is_deterministic) return;
+    
+    // Simiulate a physics loop
+    physics_time_accumulator += delta;
+
+    while (physics_time_accumulator >= fixed_timestep){
+        _step_physics(fixed_timestep);
+        physics_time_accumulator -= fixed_timestep;
     }
+}
+
+void GamePhysics::_step_physics(double step) {
+    //UtilityFunctions::print("Physics step run with timestep: ", step); (causes nonstop print)
+
+
+    // Update game objects here.
 }
 
 // Getters and setters

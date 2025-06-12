@@ -39,9 +39,9 @@ void PlayerController::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_move_speed"), &PlayerController::get_move_speed);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "move_speed", PROPERTY_HINT_RANGE, "0,1000,10"), "set_move_speed", "get_move_speed");
 
-    ClassDB::bind_method(D_METHOD("set_jump_force", "force"), &PlayerController::set_jump_force);
-    ClassDB::bind_method(D_METHOD("get_jump_force"), &PlayerController::get_jump_force);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "jump_force", PROPERTY_HINT_RANGE, "0,2000,10"), "set_jump_force", "get_jump_force");
+    ClassDB::bind_method(D_METHOD("set_jump_force", "force"), &PlayerController::set_jump_velocity);
+    ClassDB::bind_method(D_METHOD("get_jump_force"), &PlayerController::get_jump_velocity);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "jump_velocity", PROPERTY_HINT_RANGE, "0,2000,10"), "set_jump_force", "get_jump_force");
 
     ClassDB::bind_method(D_METHOD("set_gravity", "gravity"), &PlayerController::set_gravity);
     ClassDB::bind_method(D_METHOD("get_gravity"), &PlayerController::get_gravity);
@@ -85,6 +85,64 @@ void PlayerController::_ready() {
 }
 
 void PlayerController::_physics_process(double delta) {
+
+    Vector2 velocity = get_velocity();
+
+
+    if(velocity.y > max_fall_speed) {
+        velocity.y = max_fall_speed;
+    }
+
+    /*/Create jump
+    if (is_on_floor()){
+        is_jumping = false;
+    }
+    if (Input::get_singleton()->is_action_pressed("jump") && is_on_floor()) {
+        velocity.y = jump_velocity;
+        is_jumping = true;
+    }
+
+    //Variable jump
+    if (is_jumping && velocity.y < 0.0f && Input::get_singleton()->is_action_just_released("ui_accept")) {
+        velocity.y *= jump_cutoff_factor;  // Damp upward motion
+        is_jumping = false;
+    }
+    */
+    //Variable jump
+    /*if (Input::get_singleton()->is_action_pressed("jump") && velocity.y < 0) {
+        velocity.y -= (jump + gravity)/(3000*delta);
+    }
+    else if(Input::get_singleton()->is_action_pressed("jump") && is_on_floor()){
+        velocity.y -= 1000 * delta;
+    }*/
+
+    //Try of Hollow Knight method (https://www.reddit.com/r/gamemaker/comments/1dopmin/how_to_program_jumping_just_like_in_hollow_knight/)
+    if (is_on_floor()){
+        is_jumping = false;
+    }
+    if (Input::get_singleton()->is_action_just_pressed("jump") && is_on_floor()) {
+        velocity.y = -jump_velocity;
+        is_jumping = true;
+        set_state(STATE_JUMP);
+    }
+    else if (Input::get_singleton()->is_action_just_pressed("jump") && is_wall_sliding){
+        velocity.y = -jump_velocity;
+        velocity.x = wall_direction*jump_velocity*2;
+        is_jumping = true;
+        is_wall_sliding = false;
+        set_state(STATE_JUMP);
+    }
+    if (Input::get_singleton()->is_action_just_released("jump") && velocity.y < 0) {
+        velocity.y = 0;
+        velocity.x = 0;
+    }
+    // Gravity
+    if (!is_on_floor()){
+        velocity.y += gravity * delta;
+        velocity.x *=0.91;
+    }
+    set_velocity(velocity);
+    move_and_slide();
     if (!input_initialized) {
         apply_gravity(delta);
         move_and_slide();
@@ -190,6 +248,8 @@ void PlayerController::setup_placeholder_visuals() {
     camera->set_enabled(true);
     camera->set_position_smoothing_enabled(true);
     camera->set_position_smoothing_speed(5.0);
+    camera->set_zoom(Vector2(3.0,3.0));
+    
     add_child(camera);
 }
 
@@ -426,7 +486,10 @@ void PlayerController::handle_input(double delta) {
     if (is_action_safe("move_down") && input->is_action_pressed("move_down") && is_on_floor()) {
         if (Math::abs(get_velocity().x) > 50) {
             start_slide();
-        } else {
+        } else if (state==STATE_CROUCH){
+            set_state(STATE_IDLE);
+        }
+        else {
             set_state(STATE_CROUCH);
         }
     }
@@ -498,7 +561,7 @@ void PlayerController::handle_movement(double delta) {
     }
     
     // Check for wall sliding
-    if (!is_on_floor() && vel.y > 0) {
+    if (!is_on_floor() && vel.y >= 0) {
         check_wall_slide();
     } else {
         is_wall_sliding = false;
@@ -606,6 +669,8 @@ void PlayerController::apply_movement(double delta) {
 }
 
 void PlayerController::update_timers(double delta) {
+    Vector2 vel = get_velocity();
+
     if (dash_timer > 0.0f) {
         dash_timer -= delta;
         if (dash_timer <= 0.0f && state == STATE_DASH) {
@@ -623,9 +688,12 @@ void PlayerController::update_timers(double delta) {
     if (invincibility_timer > 0.0f) invincibility_timer -= delta;
     if (land_recovery_timer > 0.0f) land_recovery_timer -= delta;
     if (slide_timer > 0.0f) {
-        slide_timer -= delta;
+        slide_timer -= delta*2;
         if (slide_timer <= 0.0f && state == STATE_SLIDE) {
             set_state(STATE_IDLE);
+        }
+        else if (slide_timer > 0 && state == STATE_SLIDE) {
+            vel.x -= delta*2;
         }
     }
 }
@@ -652,13 +720,13 @@ void PlayerController::start_double_jump() {
 
 void PlayerController::start_wall_jump() {
     Vector2 vel = get_velocity();
-    vel.x = wall_direction * wall_jump_force_x;
+    vel.x = wall_direction * 3000;
     vel.y = -wall_jump_force_y;
     set_velocity(vel);
     
     wall_jump_buffer_timer = 0.0f;
     is_wall_sliding = false;
-    facing_right = (wall_direction > 0);
+    facing_right = (wall_direction < 0);
     set_state(STATE_JUMP);
 }
 
@@ -679,18 +747,20 @@ void PlayerController::start_slide() {
 }
 
 void PlayerController::check_wall_slide() {
-    if (input_buffer_x == 0) {
+    /*if (input_buffer_x == 0) {
         is_wall_sliding = false;
         return;
-    }
+    }*/ // Continue sliding when not moving
     
     int check_dir = input_buffer_x > 0 ? 1 : -1;
-    if (check_wall(check_dir)) {
+    float y_vel = get_velocity().y;
+    if (check_wall(check_dir) && y_vel >= 0) {
         is_wall_sliding = true;
         wall_direction = -check_dir;  // Wall is opposite of movement direction
         set_state(STATE_WALL_SLIDE);
-    } else {
+    } else if (y_vel >= 0){
         is_wall_sliding = false;
+        set_state(STATE_FALL);
     }
 }
 
@@ -975,8 +1045,8 @@ void PlayerController::add_score(int points) {
 void PlayerController::set_move_speed(float s) { move_speed = s; }
 float PlayerController::get_move_speed() const { return move_speed; }
 
-void PlayerController::set_jump_force(float j) { jump_force = j; }
-float PlayerController::get_jump_force() const { return jump_force; }
+void PlayerController::set_jump_velocity(float j) { jump_velocity = j; }
+float PlayerController::get_jump_velocity() const { return jump_velocity; }
 
 void PlayerController::set_gravity(float g) { gravity = g; }
 float PlayerController::get_gravity() const { return gravity; }
@@ -986,6 +1056,8 @@ int PlayerController::get_max_health() const { return max_health; }
 
 void PlayerController::set_current_health(int h) { current_health = h; }
 int PlayerController::get_current_health() const { return current_health; }
+
+
 
 void PlayerController::set_debug_draw(bool d) { 
     debug_draw = d; 

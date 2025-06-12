@@ -1,5 +1,6 @@
 #include "register_types.h"
 
+#include "game_physics.h"
 #include "gdexample.h"
 #include "player/player_controller.h"
 #include "enemy/basic_enemy.h"
